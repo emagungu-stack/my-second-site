@@ -1,0 +1,1257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evance Magungu | Visual Artist & Developer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;800&family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --accent: #f43f5e;
+            --gold: #fbbf24;
+        }
+        
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: #0a0a0a;
+            color: #e5e7eb;
+            overflow-x: hidden;
+        }
+        
+        .font-cinzel { font-family: 'Cinzel', serif; }
+        .font-playfair { font-family: 'Playfair Display', serif; }
+        
+        /* Animated Background */
+        .bg-animated {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            background: 
+                radial-gradient(ellipse at 20% 80%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 20%, rgba(244, 63, 94, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(251, 191, 36, 0.05) 0%, transparent 50%);
+            animation: bgPulse 8s ease-in-out infinite;
+        }
+        
+        @keyframes bgPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        /* Floating particles */
+        .particle {
+            position: fixed;
+            border-radius: 50%;
+            pointer-events: none;
+            animation: float linear infinite;
+            z-index: -1;
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100vh) rotate(720deg); opacity: 0; }
+        }
+        
+        /* Hero Slider */
+        .hero-slider {
+            position: relative;
+            height: 100vh;
+            overflow: hidden;
+        }
+        
+        .hero-slide {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            transition: opacity 1.5s ease-in-out, transform 8s ease-out;
+            transform: scale(1.1);
+        }
+        
+        .hero-slide.active {
+            opacity: 1;
+            transform: scale(1);
+        }
+        
+        .hero-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(0.4);
+        }
+        
+        .hero-content {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+        }
+        
+        .hero-text {
+            text-align: center;
+            animation: heroTextIn 1.5s ease-out forwards;
+        }
+        
+        @keyframes heroTextIn {
+            from { opacity: 0; transform: translateY(60px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .glitch-text {
+            position: relative;
+            animation: glitch 3s infinite;
+        }
+        
+        @keyframes glitch {
+            0%, 90%, 100% { text-shadow: none; }
+            92% { text-shadow: 2px 0 #f43f5e, -2px 0 #6366f1; }
+            94% { text-shadow: -2px 0 #f43f5e, 2px 0 #6366f1; }
+            96% { text-shadow: 2px 0 #fbbf24, -2px 0 #6366f1; }
+        }
+        
+        /* Profile Card */
+        .profile-card {
+            position: relative;
+            width: 320px;
+            height: 400px;
+            perspective: 1000px;
+        }
+        
+        .profile-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+        }
+        
+        .profile-card:hover .profile-inner {
+            transform: rotateY(180deg);
+        }
+        
+        .profile-front, .profile-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 24px;
+            overflow: hidden;
+        }
+        
+        .profile-back {
+            transform: rotateY(180deg);
+            background: linear-gradient(135deg, #1e1b4b, #312e81);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            border: 1px solid rgba(99, 102, 241, 0.3);
+        }
+        
+        /* Gallery Carousel */
+        .carousel-container {
+            position: relative;
+            overflow: hidden;
+            border-radius: 20px;
+        }
+        
+        .carousel-track {
+            display: flex;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .carousel-slide {
+            min-width: 100%;
+            position: relative;
+        }
+        
+        .carousel-slide img {
+            width: 100%;
+            height: 600px;
+            object-fit: cover;
+        }
+        
+        .carousel-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 3rem;
+            background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+        }
+        
+        /* 3D Card Stack for Gallery Grid */
+        .photo-card {
+            position: relative;
+            transform-style: preserve-3d;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .photo-card:hover {
+            transform: translateY(-10px) rotateX(5deg);
+            box-shadow: 0 25px 50px -12px rgba(99, 102, 241, 0.4);
+        }
+        
+        .photo-card::before {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            background: linear-gradient(45deg, #6366f1, #f43f5e, #fbbf24);
+            border-radius: inherit;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .photo-card:hover::before {
+            opacity: 1;
+        }
+        
+        /* Video Slider */
+        .video-slider {
+            display: flex;
+            gap: 2rem;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            padding: 2rem;
+            scrollbar-width: none;
+        }
+        
+        .video-slider::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .video-item {
+            scroll-snap-align: center;
+            min-width: 500px;
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.4s;
+        }
+        
+        .video-item:hover {
+            transform: scale(1.02);
+        }
+        
+        .video-item video {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+        }
+        
+        .play-overlay {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0,0,0,0.4);
+            transition: background 0.3s;
+        }
+        
+        .video-item:hover .play-overlay {
+            background: rgba(0,0,0,0.2);
+        }
+        
+        .play-btn {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid rgba(255,255,255,0.5);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        
+        .play-btn:hover {
+            background: rgba(99, 102, 241, 0.8);
+            transform: scale(1.1);
+        }
+        
+        /* Filter Buttons */
+        .filter-pill {
+            position: relative;
+            padding: 0.75rem 2rem;
+            border-radius: 9999px;
+            font-weight: 500;
+            transition: all 0.3s;
+            cursor: pointer;
+            border: 1px solid transparent;
+            background: rgba(255,255,255,0.05);
+            overflow: hidden;
+        }
+        
+        .filter-pill::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, #6366f1, #f43f5e);
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: -1;
+        }
+        
+        .filter-pill.active::before, .filter-pill:hover::before {
+            opacity: 1;
+        }
+        
+        .filter-pill.active, .filter-pill:hover {
+            color: white;
+            border-color: transparent;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px -10px rgba(99, 102, 241, 0.5);
+        }
+        
+        /* Skills Orbit */
+        .skills-orbit {
+            position: relative;
+            width: 400px;
+            height: 400px;
+            margin: 0 auto;
+        }
+        
+        .orbit-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, #6366f1, #f43f5e);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+            box-shadow: 0 0 60px rgba(99, 102, 241, 0.5);
+            z-index: 10;
+        }
+        
+        .orbit-item {
+            position: absolute;
+            width: 70px;
+            height: 70px;
+            background: rgba(30, 27, 75, 0.9);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+            animation: orbit 20s linear infinite;
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
+        }
+        
+        @keyframes orbit {
+            from { transform: rotate(0deg) translateX(180px) rotate(0deg); }
+            to { transform: rotate(360deg) translateX(180px) rotate(-360deg); }
+        }
+        
+        /* Contact Form Glow */
+        .input-glow {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s;
+        }
+        
+        .input-glow:focus {
+            border-color: #6366f1;
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.2);
+            outline: none;
+            background: rgba(255,255,255,0.05);
+        }
+        
+        /* Message Cards */
+        .msg-card {
+            background: linear-gradient(135deg, rgba(30, 27, 75, 0.6), rgba(17, 24, 39, 0.8));
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s;
+        }
+        
+        .msg-card:hover {
+            border-color: rgba(99, 102, 241, 0.5);
+            transform: translateX(10px);
+        }
+        
+        /* Scroll reveal */
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s ease-out;
+        }
+        
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Custom cursor */
+        .cursor-dot {
+            width: 8px;
+            height: 8px;
+            background: #6366f1;
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.1s;
+        }
+        
+        .cursor-outline {
+            width: 40px;
+            height: 40px;
+            border: 2px solid rgba(99, 102, 241, 0.5);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9998;
+            transition: all 0.15s ease-out;
+        }
+        
+        /* Social sidebar */
+        .social-sidebar {
+            position: fixed;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 50;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .social-btn {
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: white;
+            font-size: 1.2rem;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .social-btn:first-child {
+            border-top-left-radius: 12px;
+        }
+        
+        .social-btn:last-child {
+            border-bottom-left-radius: 12px;
+        }
+        
+        .social-btn::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 0;
+            height: 100%;
+            background: currentColor;
+            opacity: 0.2;
+            transition: width 0.3s;
+        }
+        
+        .social-btn:hover::before {
+            width: 100%;
+        }
+        
+        .social-btn:hover {
+            width: 60px;
+        }
+        
+        /* Lightbox */
+        .lightbox {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.95);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s;
+        }
+        
+        .lightbox.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+        
+        .lightbox img {
+            max-width: 90vw;
+            max-height: 90vh;
+            object-fit: contain;
+            border-radius: 12px;
+            transform: scale(0.8);
+            transition: transform 0.4s;
+        }
+        
+        .lightbox.active img {
+            transform: scale(1);
+        }
+        
+        /* Typing effect */
+        .typing {
+            overflow: hidden;
+            border-right: 3px solid #6366f1;
+            white-space: nowrap;
+            animation: typing 3.5s steps(40, end), blink-caret 0.75s step-end infinite;
+        }
+        
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
+        
+        @keyframes blink-caret {
+            from, to { border-color: transparent }
+            50% { border-color: #6366f1 }
+        }
+        
+        /* Progress bar */
+        .progress-bar {
+            height: 3px;
+            background: linear-gradient(90deg, #6366f1, #f43f5e, #fbbf24);
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 100;
+            transition: width 0.1s;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Progress Bar -->
+    <div class="progress-bar" id="progressBar"></div>
+
+    <!-- Custom Cursor -->
+    <div class="cursor-dot hidden md:block" id="cursorDot"></div>
+    <div class="cursor-outline hidden md:block" id="cursorOutline"></div>
+
+    <!-- Animated Background -->
+    <div class="bg-animated"></div>
+    <div id="particles"></div>
+
+    <!-- Social Sidebar -->
+    <div class="social-sidebar">
+        <a href="https://facebook.com/evance magungu" target="_blank" class="social-btn text-blue-500" style="color: #3b82f6;">
+            <i class="fab fa-facebook-f"></i>
+        </a>
+        <a href="https://instagram.com/evox_7_" target="_blank" class="social-btn text-pink-500" style="color: #ec4899;">
+            <i class="fab fa-instagram"></i>
+        </a>
+        <a href="https://youtube.com/evansmagungu6305" target="_blank" class="social-btn text-red-500" style="color: #ef4444;">
+            <i class="fab fa-youtube"></i>
+        </a>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 transition-all duration-300" id="navbar">
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <a href="#" class="font-cinzel text-2xl font-bold text-white tracking-widest">
+                    EM<span class="text-indigo-500">.</span>
+                </a>
+                <div class="hidden md:flex items-center gap-8">
+                    <a href="#home" class="text-sm font-medium text-slate-300 hover:text-white transition relative group">
+                        Home
+                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-indigo-500 transition-all group-hover:w-full"></span>
+                    </a>
+                    <a href="#gallery" class="text-sm font-medium text-slate-300 hover:text-white transition relative group">
+                        Gallery
+                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-indigo-500 transition-all group-hover:w-full"></span>
+                    </a>
+                    <a href="#videos" class="text-sm font-medium text-slate-300 hover:text-white transition relative group">
+                        Videos
+                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-indigo-500 transition-all group-hover:w-full"></span>
+                    </a>
+                    <a href="#skills" class="text-sm font-medium text-slate-300 hover:text-white transition relative group">
+                        Skills
+                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-indigo-500 transition-all group-hover:w-full"></span>
+                    </a>
+                    <a href="#inbox" class="px-6 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-full transition shadow-lg shadow-indigo-500/30">
+                        Contact
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section with Slider -->
+    <section id="home" class="hero-slider">
+        <div class="hero-slide active">
+            <img src="https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?auto=format&fit=crop&w=1920&q=80" alt="Photography">
+        </div>
+        <div class="hero-slide">
+            <img src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=1920&q=80" alt="Coding">
+        </div>
+        <div class="hero-slide">
+            <img src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=1920&q=80" alt="Camera">
+        </div>
+        
+        <div class="hero-content">
+            <div class="max-w-5xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
+                <div class="hero-text text-left">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="h-px w-12 bg-indigo-500"></div>
+                        <span class="text-indigo-400 text-sm font-semibold tracking-widest uppercase">Photographer & Developer</span>
+                    </div>
+                    <h1 class="font-cinzel text-5xl md:text-7xl font-bold text-white mb-6 leading-tight glitch-text">
+                        Evance<br>
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400">Magungu</span>
+                    </h1>
+                    <p class="text-slate-400 text-lg mb-8 max-w-md leading-relaxed">
+                        Crafting visual narratives through the lens and building digital masterpieces with code.
+                    </p>
+                    <div class="flex gap-4">
+                        <a href="#gallery" class="group px-8 py-3 bg-white text-slate-900 font-semibold rounded-full transition hover:bg-indigo-50 flex items-center gap-2">
+                            View Portfolio
+                            <i class="fas fa-arrow-right transition group-hover:translate-x-1"></i>
+                        </a>
+                        <a href="#inbox" class="px-8 py-3 border border-white/20 text-white font-semibold rounded-full hover:bg-white/10 transition backdrop-blur-sm">
+                            Hire Me
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- 3D Profile Card -->
+                <div class="hidden md:flex justify-center">
+                    <div class="profile-card">
+                        <div class="profile-inner">
+                            <div class="profile-front">
+                                <img id="profileImage" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&h=500&q=80" class="w-full h-full object-cover" alt="Profile">
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+                                <div class="absolute bottom-6 left-6 right-6">
+                                    <p class="text-white/60 text-sm mb-1">Click to upload</p>
+                                    <h3 class="text-white font-cinzel text-xl">Evance Magungu</h3>
+                                </div>
+                                <label class="absolute inset-0 cursor-pointer z-20">
+                                    <input type="file" accept="image/*" class="hidden" onchange="updateProfile(this)">
+                                </label>
+                            </div>
+                            <div class="profile-back">
+                                <div class="w-24 h-24 rounded-full border-4 border-indigo-500/30 mb-4 overflow-hidden">
+                                    <img id="profileBackImage" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80" class="w-full h-full object-cover">
+                                </div>
+                                <h3 class="font-cinzel text-2xl text-white mb-2">About Me</h3>
+                                <p class="text-slate-300 text-center text-sm leading-relaxed mb-6">
+                                    Passionate about capturing life's moments and creating seamless digital experiences.
+                                </p>
+                                <div class="flex gap-4">
+                                    <div class="text-center">
+                                        <div class="text-2xl font-bold text-indigo-400">5+</div>
+                                        <div class="text-xs text-slate-400">Years Exp</div>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="text-2xl font-bold text-pink-400">200+</div>
+                                        <div class="text-xs text-slate-400">Projects</div>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="text-2xl font-bold text-amber-400">50+</div>
+                                        <div class="text-xs text-slate-400">Clients</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Slider Indicators -->
+        <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-3 z-20">
+            <button onclick="setSlide(0)" class="slide-dot w-12 h-1 bg-white/30 rounded-full transition hover:bg-white/60 active"></button>
+            <button onclick="setSlide(1)" class="slide-dot w-12 h-1 bg-white/30 rounded-full transition hover:bg-white/60"></button>
+            <button onclick="setSlide(2)" class="slide-dot w-12 h-1 bg-white/30 rounded-full transition hover:bg-white/60"></button>
+        </div>
+    </section>
+
+    <!-- Skills Section with Orbital Animation -->
+    <section id="skills" class="py-32 relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-20 reveal">
+                <span class="text-indigo-400 text-sm font-semibold tracking-widest uppercase mb-4 block">Expertise</span>
+                <h2 class="font-cinzel text-4xl md:text-5xl font-bold text-white mb-4">Technical Arsenal</h2>
+                <div class="w-24 h-1 bg-gradient-to-r from-indigo-500 to-pink-500 mx-auto rounded-full"></div>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-16 items-center">
+                <div class="reveal">
+                    <h3 class="font-playfair text-3xl text-white mb-6 italic">"Code is poetry, visuals are emotion"</h3>
+                    <p class="text-slate-400 leading-relaxed mb-8">
+                        With expertise spanning multiple programming languages and creative tools, I bridge the gap between technical precision and artistic vision. Every project is an opportunity to push boundaries.
+                    </p>
+                    <div class="space-y-4">
+                        <div class="flex items-center gap-4 p-4 bg-white/5 rounded-xl border border-white/10 hover:border-indigo-500/50 transition">
+                            <div class="w-12 h-12 rounded-lg bg-yellow-500/20 flex items-center justify-center text-yellow-400 text-xl">
+                                <i class="fab fa-python"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-white font-semibold">Python</h4>
+                                <div class="w-48 h-2 bg-slate-700 rounded-full mt-1 overflow-hidden">
+                                    <div class="h-full bg-yellow-500 rounded-full" style="width: 95%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-4 p-4 bg-white/5 rounded-xl border border-white/10 hover:border-orange-500/50 transition">
+                            <div class="w-12 h-12 rounded-lg bg-orange-500/20 flex items-center justify-center text-orange-400 text-xl">
+                                <i class="fab fa-html5"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-white font-semibold">HTML/CSS/JS</h4>
+                                <div class="w-48 h-2 bg-slate-700 rounded-full mt-1 overflow-hidden">
+                                    <div class="h-full bg-orange-500 rounded-full" style="width: 98%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-4 p-4 bg-white/5 rounded-xl border border-white/10 hover:border-blue-500/50 transition">
+                            <div class="w-12 h-12 rounded-lg bg-blue-500/20 flex items-center justify-center text-blue-400 text-xl">
+                                <i class="fab fa-java"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-white font-semibold">Java</h4>
+                                <div class="w-48 h-2 bg-slate-700 rounded-full mt-1 overflow-hidden">
+                                    <div class="h-full bg-blue-500 rounded-full" style="width: 85%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flex justify-center reveal">
+                    <div class="skills-orbit">
+                        <div class="orbit-center">
+                            <i class="fas fa-code"></i>
+                        </div>
+                        <div class="orbit-item" style="animation-delay: 0s;"><i class="fab fa-python text-yellow-400"></i></div>
+                        <div class="orbit-item" style="animation-delay: -3.33s;"><i class="fab fa-html5 text-orange-500"></i></div>
+                        <div class="orbit-item" style="animation-delay: -6.66s;"><i class="fab fa-java text-red-400"></i></div>
+                        <div class="orbit-item" style="animation-delay: -10s;"><i class="fab fa-cuttlefish text-blue-400"></i></div>
+                        <div class="orbit-item" style="animation-delay: -13.33s;"><i class="fab fa-js text-yellow-300"></i></div>
+                        <div class="orbit-item" style="animation-delay: -16.66s;"><i class="fab fa-android text-green-400"></i></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Section with Carousel -->
+    <section id="gallery" class="py-32 relative">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-16 reveal">
+                <div>
+                    <span class="text-pink-400 text-sm font-semibold tracking-widest uppercase mb-4 block">Portfolio</span>
+                    <h2 class="font-cinzel text-4xl md:text-5xl font-bold text-white">Captured Moments</h2>
+                </div>
+                <div class="mt-6 md:mt-0 flex flex-col items-end gap-3">
+                    <label class="cursor-pointer group flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-full font-medium transition hover:shadow-lg hover:shadow-indigo-500/40 hover:-translate-y-0.5">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        Upload Photo
+                        <input type="file" class="hidden" accept="image/*" onchange="addToGallery(this)">
+                    </label>
+                    <select id="uploadCategory" class="bg-slate-800/80 text-white border border-slate-700 rounded-full px-4 py-2 text-sm focus:outline-none focus:border-indigo-500 backdrop-blur-sm">
+                        <option value="portrait">Portrait</option>
+                        <option value="landscape">Landscape</option>
+                        <option value="street">Street</option>
+                        <option value="events">Events</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Filter Pills -->
+            <div class="flex flex-wrap gap-3 mb-12 reveal">
+                <button onclick="filterGallery('all')" class="filter-pill active text-white" data-filter="all">All Works</button>
+                <button onclick="filterGallery('portrait')" class="filter-pill text-slate-400" data-filter="portrait">Portrait</button>
+                <button onclick="filterGallery('landscape')" class="filter-pill text-slate-400" data-filter="landscape">Landscape</button>
+                <button onclick="filterGallery('street')" class="filter-pill text-slate-400" data-filter="street">Street</button>
+                <button onclick="filterGallery('events')" class="filter-pill text-slate-400" data-filter="events">Events</button>
+            </div>
+
+            <!-- Featured Carousel -->
+            <div class="carousel-container mb-12 reveal" id="featuredCarousel">
+                <div class="carousel-track" id="carouselTrack">
+                    <div class="carousel-slide">
+                        <img src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?auto=format&fit=crop&w=1200&q=80" alt="Portrait">
+                        <div class="carousel-caption">
+                            <span class="text-indigo-400 text-sm font-semibold uppercase tracking-wider">Portrait</span>
+                            <h3 class="text-3xl font-cinzel text-white mt-2">The Human Connection</h3>
+                        </div>
+                    </div>
+                    <div class="carousel-slide">
+                        <img src="https://images.unsplash.com/photo-1472214103451-9374bd1c798e?auto=format&fit=crop&w=1200&q=80" alt="Landscape">
+                        <div class="carousel-caption">
+                            <span class="text-emerald-400 text-sm font-semibold uppercase tracking-wider">Landscape</span>
+                            <h3 class="text-3xl font-cinzel text-white mt-2">Nature's Canvas</h3>
+                        </div>
+                    </div>
+                    <div class="carousel-slide">
+                        <img src="https://images.unsplash.com/photo-1449824913935-59a10b8d2000?auto=format&fit=crop&w=1200&q=80" alt="Street">
+                        <div class="carousel-caption">
+                            <span class="text-amber-400 text-sm font-semibold uppercase tracking-wider">Street</span>
+                            <h3 class="text-3xl font-cinzel text-white mt-2">Urban Stories</h3>
+                        </div>
+                    </div>
+                </div>
+                <button onclick="moveCarousel(-1)" class="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-black/50 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-indigo-600 transition">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button onclick="moveCarousel(1)" class="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-black/50 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-indigo-600 transition">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+
+            <!-- Gallery Grid -->
+            <div id="galleryGrid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                <!-- Dynamic content -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Video Section with Horizontal Slider -->
+    <section id="videos" class="py-32 bg-slate-900/50 relative overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-b from-transparent via-indigo-900/10 to-transparent"></div>
+        <div class="max-w-7xl mx-auto px-6 relative">
+            <div class="flex flex-col md:flex-row justify-between items-center mb-16 reveal">
+                <div>
+                    <span class="text-amber-400 text-sm font-semibold tracking-widest uppercase mb-4 block">Motion</span>
+                    <h2 class="font-cinzel text-4xl md:text-5xl font-bold text-white">Video Productions</h2>
+                </div>
+                <div class="mt-6 md:mt-0 flex gap-3">
+                    <input type="text" id="videoTitle" placeholder="Video title..." class="input-glow text-white px-4 py-3 rounded-full text-sm w-48">
+                    <label class="cursor-pointer px-6 py-3 bg-amber-600 hover:bg-amber-700 text-white rounded-full font-medium transition flex items-center gap-2 shadow-lg shadow-amber-500/20">
+                        <i class="fas fa-plus"></i> Add
+                        <input type="file" class="hidden" accept="video/*" onchange="addVideo(this)">
+                    </label>
+                </div>
+            </div>
+
+            <div class="video-slider reveal" id="videoSlider">
+                <div class="text-slate-500 italic text-center py-20 min-w-full" id="noVideos">No videos uploaded yet. Add your first video above!</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact / Inbox Section -->
+    <section id="inbox" class="py-32 relative">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="text-center mb-16 reveal">
+                <span class="text-indigo-400 text-sm font-semibold tracking-widest uppercase mb-4 block">Connect</span>
+                <h2 class="font-cinzel text-4xl md:text-5xl font-bold text-white mb-4">Let's Create Together</h2>
+                <p class="text-slate-400 max-w-2xl mx-auto">Whether you need stunning visuals, cinematic videos, or a powerful web presence, I'm here to bring your vision to life.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-12">
+                <!-- Contact Form -->
+                <div class="reveal">
+                    <form id="contactForm" onsubmit="handleSubmit(event)" class="space-y-6">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-slate-400 mb-2">Name</label>
+                                <input type="text" required class="input-glow w-full px-4 py-3 rounded-xl text-white" placeholder="John Doe">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-slate-400 mb-2">Email</label>
+                                <input type="email" required class="input-glow w-full px-4 py-3 rounded-xl text-white" placeholder="john@example.com">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-400 mb-2">Service Needed</label>
+                            <select id="serviceType" class="input-glow w-full px-4 py-3 rounded-xl text-white">
+                                <option value="Photography">Photography</option>
+                                <option value="Videography">Videography</option>
+                                <option value="Web Programming">Web Programming</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-400 mb-2">Message</label>
+                            <textarea required rows="4" class="input-glow w-full px-4 py-3 rounded-xl text-white" placeholder="Tell me about your project..."></textarea>
+                        </div>
+                        <button type="submit" class="w-full py-4 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-bold rounded-xl transition shadow-lg shadow-indigo-500/30 transform hover:-translate-y-1">
+                            Send Message <i class="fas fa-paper-plane ml-2"></i>
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Inbox Display -->
+                <div class="reveal">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="font-cinzel text-2xl text-white">Inbox</h3>
+                        <span id="msgCount" class="px-3 py-1 bg-indigo-600 text-white text-sm rounded-full">0 new</span>
+                    </div>
+                    <div id="messagesList" class="space-y-4 max-h-[500px] overflow-y-auto pr-2">
+                        <div class="text-slate-500 italic text-center py-8">No messages yet. Your inbox is waiting!</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-12 border-t border-slate-800 bg-slate-950">
+        <div class="max-w-7xl mx-auto px-6 text-center">
+            <h3 class="font-cinzel text-2xl text-white mb-4">Evance Magungu</h3>
+            <p class="text-slate-500 mb-6">Creating visual stories & digital experiences</p>
+            <div class="flex justify-center gap-6 md:hidden mb-6">
+                <a href="#" class="text-slate-400 hover:text-blue-500 text-xl"><i class="fab fa-facebook"></i></a>
+                <a href="#" class="text-slate-400 hover:text-pink-500 text-xl"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="text-slate-400 hover:text-red-500 text-xl"><i class="fab fa-youtube"></i></a>
+            </div>
+            <p class="text-slate-600 text-sm"> Evance Magungu. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Lightbox -->
+    <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+        <button class="absolute top-6 right-6 text-white text-4xl hover:text-indigo-400 transition">&times;</button>
+        <img id="lightboxImg" src="" alt="Full view">
+        <div class="absolute bottom-6 left-1/2 -translate-x-1/2 text-white/60 text-sm" id="lightboxCaption"></div>
+    </div>
+
+    <script>
+        // ===== DATA =====
+        let galleryData = [
+            { id: 1, category: 'portrait', src: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?auto=format&fit=crop&w=600&q=80', title: 'Ethereal Gaze' },
+            { id: 2, category: 'landscape', src: 'https://images.unsplash.com/photo-1472214103451-9374bd1c798e?auto=format&fit=crop&w=600&q=80', title: 'Mountain Dawn' },
+            { id: 3, category: 'street', src: 'https://images.unsplash.com/photo-1449824913935-59a10b8d2000?auto=format&fit=crop&w=600&q=80', title: 'City Rhythm' },
+            { id: 4, category: 'events', src: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=600&q=80', title: 'Festival Lights' },
+            { id: 5, category: 'portrait', src: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=600&q=80', title: 'Character Study' },
+            { id: 6, category: 'landscape', src: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=600&q=80', title: 'Alpine Serenity' },
+            { id: 7, category: 'street', src: 'https://images.unsplash.com/photo-1517732306149-e8f829eb588a?auto=format&fit=crop&w=600&q=80', title: 'Night Market' },
+            { id: 8, category: 'events', src: 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&w=600&q=80', title: 'Wedding Bliss' },
+        ];
+        let videosData = [];
+        let messagesData = [];
+        let currentSlide = 0;
+        let currentCarousel = 0;
+
+        // ===== INIT =====
+        document.addEventListener('DOMContentLoaded', () => {
+            createParticles();
+            startHeroSlider();
+            renderGallery('all');
+            initScrollReveal();
+            initCursor();
+            initProgressBar();
+        });
+
+        // ===== PARTICLES =====
+        function createParticles() {
+            const container = document.getElementById('particles');
+            for (let i = 0; i < 30; i++) {
+                const p = document.createElement('div');
+                p.className = 'particle';
+                p.style.width = Math.random() * 4 + 'px';
+                p.style.height = p.style.width;
+                p.style.background = ['#6366f1', '#f43f5e', '#fbbf24'][Math.floor(Math.random() * 3)];
+                p.style.left = Math.random() * 100 + 'vw';
+                p.style.animationDuration = (Math.random() * 10 + 10) + 's';
+                p.style.animationDelay = Math.random() * 10 + 's';
+                container.appendChild(p);
+            }
+        }
+
+        // ===== HERO SLIDER =====
+        function startHeroSlider() {
+            setInterval(() => {
+                setSlide((currentSlide + 1) % 3);
+            }, 5000);
+        }
+
+        function setSlide(index) {
+            const slides = document.querySelectorAll('.hero-slide');
+            const dots = document.querySelectorAll('.slide-dot');
+            
+            slides[currentSlide].classList.remove('active');
+            dots[currentSlide].classList.remove('active', 'bg-white/60');
+            dots[currentSlide].classList.add('bg-white/30');
+            
+            currentSlide = index;
+            
+            slides[currentSlide].classList.add('active');
+            dots[currentSlide].classList.add('active', 'bg-white/60');
+            dots[currentSlide].classList.remove('bg-white/30');
+        }
+
+        // ===== PROFILE =====
+        function updateProfile(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    document.getElementById('profileImage').src = e.target.result;
+                    document.getElementById('profileBackImage').src = e.target.result;
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        // ===== GALLERY =====
+        function renderGallery(filter) {
+            const grid = document.getElementById('galleryGrid');
+            grid.innerHTML = '';
+            
+            const filtered = filter === 'all' ? galleryData : galleryData.filter(i => i.category === filter);
+            
+            filtered.forEach((item, idx) => {
+                const div = document.createElement('div');
+                div.className = 'photo-card rounded-2xl overflow-hidden cursor-pointer group';
+                div.style.animationDelay = `${idx * 0.1}s`;
+                div.onclick = () => openLightbox(item.src, item.title);
+                
+                div.innerHTML = `
+                    <div class="relative overflow-hidden">
+                        <img src="${item.src}" class="w-full h-64 object-cover transition duration-700 group-hover:scale-110" loading="lazy">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex flex-col justify-end p-4">
+                            <span class="text-indigo-400 text-xs font-bold uppercase tracking-wider">${item.category}</span>
+                            <h4 class="text-white font-cinzel text-lg">${item.title}</h4>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(div);
+            });
+        }
+
+        function filterGallery(category) {
+            document.querySelectorAll('.filter-pill').forEach(btn => {
+                btn.classList.remove('active', 'text-white');
+                btn.classList.add('text-slate-400');
+            });
+            const active = document.querySelector(`[data-filter="${category}"]`);
+            active.classList.add('active', 'text-white');
+            active.classList.remove('text-slate-400');
+            renderGallery(category);
+        }
+
+        function addToGallery(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                const cat = document.getElementById('uploadCategory').value;
+                reader.onload = (e) => {
+                    galleryData.unshift({
+                        id: Date.now(),
+                        category: cat,
+                        src: e.target.result,
+                        title: 'New Upload'
+                    });
+                    renderGallery(document.querySelector('.filter-pill.active').dataset.filter);
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        // ===== CAROUSEL =====
+        function moveCarousel(dir) {
+            const track = document.getElementById('carouselTrack');
+            const slides = track.children;
+            currentCarousel = (currentCarousel + dir + slides.length) % slides.length;
+            track.style.transform = `translateX(-${currentCarousel * 100}%)`;
+        }
+
+        // ===== VIDEOS =====
+        function addVideo(input) {
+            const title = document.getElementById('videoTitle').value || 'Untitled Video';
+            if (input.files && input.files[0]) {
+                const url = URL.createObjectURL(input.files[0]);
+                videosData.push({ id: Date.now(), title, src: url });
+                renderVideos();
+                document.getElementById('videoTitle').value = '';
+            }
+        }
+
+        function renderVideos() {
+            const slider = document.getElementById('videoSlider');
+            if (videosData.length === 0) {
+                slider.innerHTML = '<div class="text-slate-500 italic text-center py-20 min-w-full" id="noVideos">No videos uploaded yet.</div>';
+                return;
+            }
+            
+            slider.innerHTML = '';
+            videosData.forEach(video => {
+                const div = document.createElement('div');
+                div.className = 'video-item';
+                div.innerHTML = `
+                    <video src="${video.src}" loop muted></video>
+                    <div class="play-overlay" onclick="toggleVideo(this)">
+                        <div class="play-btn">
+                            <i class="fas fa-play text-white text-xl ml-1"></i>
+                        </div>
+                    </div>
+                    <div class="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/90 to-transparent">
+                        <h4 class="text-white font-cinzel text-xl">${video.title}</h4>
+                        <p class="text-slate-400 text-sm mt-1">Video Production</p>
+                    </div>
+                `;
+                slider.appendChild(div);
+            });
+        }
+
+        function toggleVideo(overlay) {
+            const video = overlay.previousElementSibling;
+            const icon = overlay.querySelector('i');
+            if (video.paused) {
+                video.play();
+                icon.classList.remove('fa-play');
+                icon.classList.add('fa-pause');
+                overlay.style.opacity = '0';
+                overlay.style.pointerEvents = 'none';
+                video.controls = true;
+            }
+        }
+
+        // ===== CONTACT / INBOX =====
+        function handleSubmit(e) {
+            e.preventDefault();
+            const form = e.target;
+            const msg = {
+                id: Date.now(),
+                name: form[0].value,
+                email: form[1].value,
+                service: document.getElementById('serviceType').value,
+                message: form[3].value,
+                date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+            };
+            messagesData.unshift(msg);
+            renderMessages();
+            form.reset();
+            
+            // Success animation
+            const btn = form.querySelector('button');
+            const original = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-check"></i> Sent!';
+            btn.classList.add('bg-green-600');
+            setTimeout(() => {
+                btn.innerHTML = original;
+                btn.classList.remove('bg-green-600');
+            }, 2000);
+        }
+
+        function renderMessages() {
+            const list = document.getElementById('messagesList');
+            const count = document.getElementById('msgCount');
+            count.textContent = `${messagesData.length} new`;
+            
+            if (messagesData.length === 0) {
+                list.innerHTML = '<div class="text-slate-500 italic text-center py-8">No messages yet.</div>';
+                return;
+            }
+            
+            list.innerHTML = '';
+            messagesData.forEach(msg => {
+                const div = document.createElement('div');
+                div.className = 'msg-card p-5 rounded-xl';
+                div.innerHTML = `
+                    <div class="flex items-start gap-4">
+                        <div class="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center text-white font-bold text-sm">
+                            ${msg.name.charAt(0)}
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <div class="flex justify-between items-start mb-1">
+                                <h4 class="text-white font-semibold truncate">${msg.name}</h4>
+                                <span class="text-xs text-slate-500">${msg.date}</span>
+                            </div>
+                            <span class="inline-block px-2 py-0.5 bg-indigo-500/20 text-indigo-300 text-xs rounded mb-2">${msg.service}</span>
+                            <p class="text-slate-300 text-sm line-clamp-2">${msg.message}</p>
+                        </div>
+                    </div>
+                `;
+                list.appendChild(div);
+            });
+        }
+
+        // ===== LIGHTBOX =====
+        function openLightbox(src, caption) {
+            const lb = document.getElementById('lightbox');
+            document.getElementById('lightboxImg').src = src;
+            document.getElementById('lightboxCaption').textContent = caption || '';
+            lb.classList.add('active');
+        }
+
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.remove('active');
+        }
+
+        // ===== SCROLL REVEAL =====
+        function initScrollReveal() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+        }
+
+        // ===== CUSTOM CURSOR =====
+        function initCursor() {
+            const dot = document.getElementById('cursorDot');
+            const outline = document.getElementById('cursorOutline');
+            
+            document.addEventListener('mousemove', (e) => {
+                dot.style.left = e.clientX + 'px';
+                dot.style.top = e.clientY + 'px';
+                outline.style.left = e.clientX + 'px';
+                outline.style.top = e.clientY + 'px';
+            });
+            
+            document.querySelectorAll('a, button, .photo-card, .video-item').forEach(el => {
+                el.addEventListener('mouseenter', () => {
+                    outline.style.transform = 'translate(-50%, -50%) scale(1.5)';
+                    outline.style.borderColor = '#f43f5e';
+                });
+                el.addEventListener('mouseleave', () => {
+                    outline.style.transform = 'translate(-50%, -50%) scale(1)';
+                    outline.style.borderColor = 'rgba(99, 102, 241, 0.5)';
+                });
+            });
+        }
+
+        // ===== PROGRESS BAR =====
+        function initProgressBar() {
+            window.addEventListener('scroll', () => {
+                const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+                const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+                const scrolled = (winScroll / height) * 100;
+                document.getElementById('progressBar').style.width = scrolled + '%';
+            });
+        }
+
+        // ===== NAVBAR SCROLL =====
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                nav.classList.add('bg-slate-900/90', 'backdrop-blur-md', 'shadow-lg');
+            } else {
+                nav.classList.remove('bg-slate-900/90', 'backdrop-blur-md', 'shadow-lg');
+            }
+        });
+
+        // Keyboard nav for lightbox
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeLightbox();
+        });
+    </script>
+</body>
+</html>
