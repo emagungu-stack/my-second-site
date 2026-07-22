@@ -540,6 +540,7 @@
             transition: width 0.1s;
         }
     </style>
+<base target="_blank">
 </head>
 <body>
 
@@ -644,12 +645,9 @@
                                 <img id="profileImage" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&h=500&q=80" class="w-full h-full object-cover" alt="Profile">
                                 <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
                                 <div class="absolute bottom-6 left-6 right-6">
-                                    <p class="text-white/60 text-sm mb-1">Click to upload</p>
-                                    <h3 class="text-white font-cinzel text-xl">Evance Magungu</h3>
+                                        <h3 class="text-white font-cinzel text-xl">Evance Magungu</h3>
                                 </div>
-                                <label class="absolute inset-0 cursor-pointer z-20">
-                                    <input type="file" accept="image/*" class="hidden" onchange="updateProfile(this)">
-                                </label>
+                                
                             </div>
                             <div class="profile-back">
                                 <div class="w-24 h-24 rounded-full border-4 border-indigo-500/30 mb-4 overflow-hidden">
@@ -765,19 +763,7 @@
                     <span class="text-pink-400 text-sm font-semibold tracking-widest uppercase mb-4 block">Portfolio</span>
                     <h2 class="font-cinzel text-4xl md:text-5xl font-bold text-white">Captured Moments</h2>
                 </div>
-                <div class="mt-6 md:mt-0 flex flex-col items-end gap-3">
-                    <label class="cursor-pointer group flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-full font-medium transition hover:shadow-lg hover:shadow-indigo-500/40 hover:-translate-y-0.5">
-                        <i class="fas fa-cloud-upload-alt"></i>
-                        Upload Photo
-                        <input type="file" class="hidden" accept="image/*" onchange="addToGallery(this)">
-                    </label>
-                    <select id="uploadCategory" class="bg-slate-800/80 text-white border border-slate-700 rounded-full px-4 py-2 text-sm focus:outline-none focus:border-indigo-500 backdrop-blur-sm">
-                        <option value="portrait">Portrait</option>
-                        <option value="landscape">Landscape</option>
-                        <option value="street">Street</option>
-                        <option value="events">Events</option>
-                    </select>
-                </div>
+
             </div>
 
             <!-- Filter Pills -->
@@ -838,17 +824,11 @@
                     <span class="text-amber-400 text-sm font-semibold tracking-widest uppercase mb-4 block">Motion</span>
                     <h2 class="font-cinzel text-4xl md:text-5xl font-bold text-white">Video Productions</h2>
                 </div>
-                <div class="mt-6 md:mt-0 flex gap-3">
-                    <input type="text" id="videoTitle" placeholder="Video title..." class="input-glow text-white px-4 py-3 rounded-full text-sm w-48">
-                    <label class="cursor-pointer px-6 py-3 bg-amber-600 hover:bg-amber-700 text-white rounded-full font-medium transition flex items-center gap-2 shadow-lg shadow-amber-500/20">
-                        <i class="fas fa-plus"></i> Add
-                        <input type="file" class="hidden" accept="video/*" onchange="addVideo(this)">
-                    </label>
-                </div>
+
             </div>
 
             <div class="video-slider reveal" id="videoSlider">
-                <div class="text-slate-500 italic text-center py-20 min-w-full" id="noVideos">No videos uploaded yet. Add your first video above!</div>
+                
             </div>
         </div>
     </section>
@@ -941,7 +921,10 @@
             { id: 7, category: 'street', src: 'https://images.unsplash.com/photo-1517732306149-e8f829eb588a?auto=format&fit=crop&w=600&q=80', title: 'Night Market' },
             { id: 8, category: 'events', src: 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&w=600&q=80', title: 'Wedding Bliss' },
         ];
-        let videosData = [];
+        let videosData = [
+            { id: 1, title: 'Demo Reel 2024', src: 'videos/demo-reel.mp4' },
+            { id: 2, title: 'Behind the Scenes', src: 'videos/behind-scenes.mp4' }
+        ];
         let messagesData = [];
         let currentSlide = 0;
         let currentCarousel = 0;
@@ -951,6 +934,7 @@
             createParticles();
             startHeroSlider();
             renderGallery('all');
+            renderVideos();
             initScrollReveal();
             initCursor();
             initProgressBar();
@@ -994,17 +978,7 @@
             dots[currentSlide].classList.remove('bg-white/30');
         }
 
-        // ===== PROFILE =====
-        function updateProfile(input) {
-            if (input.files && input.files[0]) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    document.getElementById('profileImage').src = e.target.result;
-                    document.getElementById('profileBackImage').src = e.target.result;
-                };
-                reader.readAsDataURL(input.files[0]);
-            }
-        }
+        
 
         // ===== GALLERY =====
         function renderGallery(filter) {
@@ -1043,22 +1017,7 @@
             renderGallery(category);
         }
 
-        function addToGallery(input) {
-            if (input.files && input.files[0]) {
-                const reader = new FileReader();
-                const cat = document.getElementById('uploadCategory').value;
-                reader.onload = (e) => {
-                    galleryData.unshift({
-                        id: Date.now(),
-                        category: cat,
-                        src: e.target.result,
-                        title: 'New Upload'
-                    });
-                    renderGallery(document.querySelector('.filter-pill.active').dataset.filter);
-                };
-                reader.readAsDataURL(input.files[0]);
-            }
-        }
+
 
         // ===== CAROUSEL =====
         function moveCarousel(dir) {
@@ -1069,15 +1028,7 @@
         }
 
         // ===== VIDEOS =====
-        function addVideo(input) {
-            const title = document.getElementById('videoTitle').value || 'Untitled Video';
-            if (input.files && input.files[0]) {
-                const url = URL.createObjectURL(input.files[0]);
-                videosData.push({ id: Date.now(), title, src: url });
-                renderVideos();
-                document.getElementById('videoTitle').value = '';
-            }
-        }
+
 
         function renderVideos() {
             const slider = document.getElementById('videoSlider');
