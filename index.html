@@ -529,6 +529,10 @@
             50% { border-color: #6366f1 }
         }
         
+        html {
+            scroll-behavior: smooth;
+        }
+
         /* Progress bar */
         .progress-bar {
             height: 3px;
@@ -540,6 +544,7 @@
             transition: width 0.1s;
         }
     </style>
+<base target="_blank">
 <base target="_blank">
 <base target="_blank">
 </head>
@@ -1204,6 +1209,25 @@
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') closeLightbox();
         });
+
+        // ===== SMOOTH SCROLL NAVIGATION =====
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    return;
+                }
+                const targetSection = document.querySelector(targetId);
+                if (targetSection) {
+                    const navHeight = document.getElementById('navbar').offsetHeight;
+                    const targetPosition = targetSection.getBoundingClientRect().top + window.pageYOffset - navHeight - 20;
+                    window.scrollTo({ top: targetPosition, behavior: 'smooth' });
+                }
+            });
+        });
+
     </script>
 </body>
 </html>
